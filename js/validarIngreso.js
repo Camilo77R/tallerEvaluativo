@@ -1,3 +1,26 @@
+// Verificar si ya hay una sesión activa
+function verificarSesion() {
+    const username = localStorage.getItem('username');
+    if (username) {
+        Toastify({
+            text: "Ya has iniciado sesión como " + username,
+            duration: 3000,
+            gravity: "top",
+            position: "center",
+            backgroundColor: "#22c55e",
+            className: "rounded-lg",
+            stopOnFocus: true,
+        }).showToast();
+        
+        setTimeout(() => {
+            window.location.href = 'juiciosAprendicesFicha.html';
+        }, 1000);
+    }
+}
+
+// Verificar sesión al cargar la página
+document.addEventListener('DOMContentLoaded', verificarSesion);
+
 const form = document.getElementById('loginForm');
 const errorMsg = document.getElementById('error');
 

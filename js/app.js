@@ -19,7 +19,21 @@ function showToast(message, isError = false) {
 function inicializarSesion() {
     const username = localStorage.getItem('username');
     if (!username) {
-        window.location.href = 'index.html';
+        // Mostrar toast de error y redirigir
+        Toastify({
+            text: "⚠️ Debe iniciar sesión primero",
+            duration: 3000,
+            gravity: "top",
+            position: "center",
+            backgroundColor: "#ef4444",
+            className: "rounded-lg",
+            stopOnFocus: true,
+            close: true,
+        }).showToast();
+        
+        setTimeout(() => {
+            window.location.href = 'index.html';
+        }, 1000);
         return;
     }
     
