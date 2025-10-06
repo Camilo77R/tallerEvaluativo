@@ -1,17 +1,38 @@
 const form = document.getElementById('loginForm');
 const errorMsg = document.getElementById('error');
 
-form.addEventListener('submit', function(event) {//este event submit es para que al dar click en el boton de ingresar se ejecute la funcion
+function showToast(message, isError = false) {
+    Toastify({
+        text: message,
+        duration: 3000,
+        gravity: "top",
+        position: "right",
+        backgroundColor: isError ? "#ef4444" : "#22c55e",
+        className: "rounded-lg",
+        stopOnFocus: true,
+    }).showToast();
+}
+
+form.addEventListener('submit', function(event) {
     event.preventDefault();
 
     const username = form.username.value.trim();
     const password = form.password.value;
 
+    if (username === '') {
+        showToast("Por favor ingrese un nombre de usuario", true);
+        return;
+    }
+
     if(password === '06102025') {
-        localStorage.setItem('username', username);//aqui guarda el nombre de usuario en el almacenamiento local
-        window.location.href = 'juiciosAprendicesFicha.html'; //aqui redirige a la pagina principal
+        showToast("¡Bienvenido " + username + "! Iniciando sesión...");
+        localStorage.setItem('username', username);
+        setTimeout(() => {
+            window.location.href = 'juiciosAprendicesFicha.html';
+        }, 1000);
     } else {
-        errorMsg.textContent = 'Contraseña incorrecta. Intente de nuevo.';
+        showToast("Contraseña incorrecta. Intente de nuevo.", true);
+        errorMsg.textContent = '';
     }
 });
 

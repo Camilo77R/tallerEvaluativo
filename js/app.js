@@ -3,6 +3,18 @@ import { obtenerFichas } from "./fichaAdso.js";
 const selectfichas = document.querySelector("#selector-ficha");
 const selectAprendices = document.querySelector("#selector-aprendiz");
 
+function showToast(message, isError = false) {
+    Toastify({
+        text: message,
+        duration: 3000,
+        gravity: "top",
+        position: "right",
+        backgroundColor: isError ? "#ef4444" : "#22c55e",
+        className: "rounded-lg",
+        stopOnFocus: true,
+    }).showToast();
+}
+
 // Función para verificar sesión y configurar la interfaz
 function inicializarSesion() {
     const username = localStorage.getItem('username');
@@ -13,13 +25,19 @@ function inicializarSesion() {
     
     // Mostrar nombre de usuario
     document.getElementById('userLogin').textContent = username;
+    showToast("Bienvenido de nuevo, " + username);
     
     // Configurar botón de salir
     const btnSalir = document.getElementById('btn-salir');
     if (btnSalir) {
         btnSalir.addEventListener('click', () => {
-            localStorage.removeItem('username');
-            window.location.href = 'index.html';
+            if(confirm('¿Está seguro que desea cerrar sesión?')) {
+                showToast("¡Hasta pronto, " + username + "!");
+                setTimeout(() => {
+                    localStorage.removeItem('username');
+                    window.location.href = 'index.html';
+                }, 1500);
+            }
         });
     }
 }
@@ -76,9 +94,12 @@ selectfichas.addEventListener('change', async () => {
                 option.textContent = aprendiz["Número de Documento"];
                 selectAprendices.appendChild(option);
             });
+            
+            showToast("Ficha cargada correctamente");
         }
     } catch(error) {
         console.error("Error al cargar datos de la ficha:", error);
+        showToast("Error al cargar los datos de la ficha", true);
     }
 });
 
@@ -124,6 +145,8 @@ selectAprendices.addEventListener('change', async () => {
                 `;
                 tbody.appendChild(tr);
             });
+            
+            showToast(`Aprendiz ${aprendizSeleccionado.Nombre} cargado correctamente`);
         } catch(error) {
             console.error("Error al cargar resultados:", error);
         }
